@@ -4,12 +4,11 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
 @TeleOp(name="TeleOp Shooter", group="TeleOp")
-public class TeleOpshooter extends OpMode {
+public class TeleOpShooter extends OpMode {
 
     private ElapsedTime time = new ElapsedTime();
     private DcMotorEx outtake;
