@@ -42,7 +42,7 @@ public class Outtake {
         error = 0;
     }
 
-    public void lift(double targetPower) {
+    public double lift(double targetPower) {
         init();
         double p = 0;
         double i = 0;
@@ -63,8 +63,10 @@ public class Outtake {
             previousError = error;
             previousTime = currentTime;
             currentPower = (double)(outtake.getPower());
-            outtake.setPower(motorPower);
-            outtake.setPower(motorPower);
+
+            return motorPower;
         }
+
+        return motorPower;
     }
 }

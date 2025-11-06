@@ -41,26 +41,6 @@ public class TeleOp extends OpMode {
         fr.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         br.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
-        fl = hardwareMap.get(DcMotorEx.class, "fl");
-        fr = hardwareMap.get(DcMotorEx.class, "fr");
-        bl = hardwareMap.get(DcMotorEx.class, "bl");
-        br = hardwareMap.get(DcMotorEx.class, "br");
-
-        fl.setDirection(DcMotorEx.Direction.FORWARD);
-        fr.setDirection(DcMotorEx.Direction.REVERSE);
-        bl.setDirection(DcMotorEx.Direction.FORWARD);
-        br.setDirection(DcMotorEx.Direction.REVERSE);
-
-        fl.setMode(DcMotorEx.RunMode.RUN_WITHOUT_ENCODER);
-        fr.setMode(DcMotorEx.RunMode.RUN_WITHOUT_ENCODER);
-        bl.setMode(DcMotorEx.RunMode.RUN_WITHOUT_ENCODER);
-        br.setMode(DcMotorEx.RunMode.RUN_WITHOUT_ENCODER);
-
-        fl.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
-        bl.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
-        fr.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
-        br.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
-
         dist = hardwareMap.get(DistanceSensor.class, "dist");
         color = hardwareMap.get(ColorSensor.class, "color");
 
