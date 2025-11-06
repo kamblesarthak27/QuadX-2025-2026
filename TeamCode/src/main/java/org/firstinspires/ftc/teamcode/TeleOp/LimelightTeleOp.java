@@ -155,7 +155,7 @@ public class LimelightTeleOp extends OpMode {
     }
 
     public void LimelightFunctions() {
-        
+
     }
 }
 
