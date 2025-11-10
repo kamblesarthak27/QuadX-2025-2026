@@ -9,7 +9,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
 @TeleOp(name="TeleOp Shooter", group="TeleOp")
-public class TeleOpshooter extends OpMode {
+public class PIDTeleOp extends OpMode {
 
     private ElapsedTime time = new ElapsedTime();
 

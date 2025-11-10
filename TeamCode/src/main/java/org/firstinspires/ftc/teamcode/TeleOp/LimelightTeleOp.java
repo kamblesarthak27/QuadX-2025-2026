@@ -78,6 +78,7 @@ public class LimelightTeleOp extends OpMode {
         }
 
 
+
         if (gamepad1.a && !lastToggle) {
             straightAssist = !straightAssist;
         }
@@ -92,6 +93,32 @@ public class LimelightTeleOp extends OpMode {
             strafe = snapInput(strafe);
             turn = snapInput(turn);
         }
+
+        if (gamepad1.b){
+            double tx = results.getTx();
+
+            if ((tx > 0) && results.isValid()){
+                turn = (float) ((float)tx * -0.1);
+            }
+
+            if ((tx < 0) && results.isValid()){
+                turn = (float) ((float)tx * 0.1);
+            }
+        }
+
+        if (gamepad1.a){
+            double ty = results.getTx();
+
+            if ((ty > 0) && results.isValid()){
+                turn = (float) ((float)ty * -0.1);
+            }
+
+            if ((ty < 0) && results.isValid()){
+                turn = (float) ((float)ty * 0.1);
+            }
+        }
+
+
 
         double frPower = Range.clip(drive + turn - strafe, -1.0, 1.0);
         double flPower = Range.clip(drive - turn + strafe, -1.0, 1.0);
