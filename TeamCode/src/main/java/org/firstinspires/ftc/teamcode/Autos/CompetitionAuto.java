@@ -22,7 +22,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 @Config
 @Autonomous(name = "testingAuto", group = "Autonomous")
-public class testingauto extends LinearOpMode {
+public class CompetitionAuto extends LinearOpMode {
 
     //Outtake pid = new Outtake();
 

@@ -5,10 +5,9 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
-import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.Range;
 @TeleOp(name="TeleOpTest", group="TeleOp")
-public class TeleOpTest extends OpMode{
+public class CompetitionTeleOp extends OpMode{
     private DcMotorEx outtake, outtake2, fl, fr, bl, br, frontIntake, backIntake;
 
     @Override

@@ -7,10 +7,9 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.Range;
-import com.qualcomm.robotcore.util.SerialNumber;
 
 @TeleOp(name="TeleOp Decode12", group="TeleOp")
-public class teleopRun extends OpMode {
+public class BrokenTeleOp extends OpMode {
 
     private DcMotorEx outtake, outtake2, fl, fr, bl, br, frontIntake, backIntake;
     private Servo shroud;
