@@ -1,8 +1,10 @@
-package org.firstinspires.ftc.teamcode.PIDs;
+package org.firstinspires.ftc.teamcode.Autos;
 
 import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.hardwareMap;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
@@ -24,15 +26,12 @@ public class Outtake {
     public void init() {
         time = new ElapsedTime();
 
-        outtake = hardwareMap.dcMotor.get("outtake");
-        outtake.setDirection(DcMotor.Direction.FORWARD);
-        outtake.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        outtake.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        outtake = hardwareMap.get(DcMotorEx.class, "outtake");
 
-        tolerance = 0.03;
+        tolerance = 0.01;
         previousTime = 0;
         previousError = 0;
-        Kp = 0;
+        Kp = 1;
         Ki = 0;
         Kd = 0;
         max_i = 0.2;

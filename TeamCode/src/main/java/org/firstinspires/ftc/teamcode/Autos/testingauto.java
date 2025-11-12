@@ -18,12 +18,13 @@ import org.firstinspires.ftc.teamcode.MecanumDrive;
 
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
-import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 @Config
 @Autonomous(name = "testingAuto", group = "Autonomous")
 public class testingauto extends LinearOpMode {
+
+    //Outtake pid = new Outtake();
 
     public class Intake {
         private DcMotorEx intakeFront;
@@ -74,11 +75,11 @@ public class testingauto extends LinearOpMode {
         }
     }
 
-    public class Outtake {
+    public class Outtake1 {
         private DcMotorEx outtake1;
         private DcMotorEx outtake2;
 
-        public Outtake (HardwareMap hardwareMap){
+        public Outtake1 (HardwareMap hardwareMap){
             outtake1 = hardwareMap.get(DcMotorEx.class, "outtake");
             outtake1.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
             outtake1.setDirection(DcMotorSimple.Direction.REVERSE);
@@ -110,14 +111,14 @@ public class testingauto extends LinearOpMode {
                 if (runtime.seconds() < durationSeconds) {
                     return true; // Continue running
                 } else {
-                    outtake1.setPower(0); // Stop the motors
-                    outtake2.setPower(0);
+                    //outtake1.setPower(0); // Stop the motors
+                    //outtake2.setPower(0);
                     return false; // Stop running
                 }
             }
         }
         public Action runForDuration(double power, double durationSeconds) {
-            return new Outtake.RunOuttakeForTime(power, durationSeconds);
+            return new Outtake1.RunOuttakeForTime(power, durationSeconds);
         }
     }
 
@@ -127,32 +128,31 @@ public class testingauto extends LinearOpMode {
         Pose2d initialPose = new Pose2d(60, -10, Math.toRadians(180));
         MecanumDrive drive = new MecanumDrive(hardwareMap, initialPose);
         Intake intake = new Intake(hardwareMap);
-        Outtake shooter = new Outtake(hardwareMap);
+        Outtake1 shooter = new Outtake1(hardwareMap);
 
         // vision here that outputs pattern (Do later)
         // int visionOutputPosition = 1;
 
         TrajectoryActionBuilder traj1 = drive.actionBuilder(initialPose)
-                .setTangent(Math.toRadians(90))
-                .strafeToSplineHeading(new Vector2d(40, -60), Math.toRadians(270))
-                .waitSeconds(3);
+                .strafeToSplineHeading(new Vector2d(55, -10), Math.toRadians(207));
+
+        TrajectoryActionBuilder traj2 = drive.actionBuilder(initialPose)
+                .lineToXLinearHeading(33, Math.toRadians(270));
+
+        TrajectoryActionBuilder traj3 = traj2.endTrajectory().fresh()
+                .setTangent(Math.toRadians(270))
+                .splineToConstantHeading(new Vector2d(33, -48), Math.toRadians(270))
+                //.waitSeconds(3)
+                ;
         /*
-        TrajectoryActionBuilder tab2 = drive.actionBuilder(initialPose)
-                .lineToY(37)
-                .setTangent(Math.toRadians(0))
-                .lineToX(18)
-                .waitSeconds(3)
-                .setTangent(Math.toRadians(0))
-                .lineToXSplineHeading(46, Math.toRadians(180))
-                .waitSeconds(3);
         TrajectoryActionBuilder tab3 = drive.actionBuilder(initialPose)
                 .lineToYSplineHeading(33, Math.toRadians(180))
                 .waitSeconds(2)
                 .strafeTo(new Vector2d(46, 30))
                 .waitSeconds(3);
                 */
-        Action trajectoryActionCloseOut = traj1.endTrajectory().fresh()
-                .strafeToSplineHeading(new Vector2d(60, -10), Math.toRadians(195))
+        Action trajectoryActionCloseOut = traj3.endTrajectory().fresh()
+                .strafeToSplineHeading(new Vector2d(55, -10), Math.toRadians(202))
                 .build();
 
         while (!isStopRequested() && !opModeIsActive()) {
@@ -181,11 +181,22 @@ public class testingauto extends LinearOpMode {
 
         Actions.runBlocking(
                 new SequentialAction(
+                        shooter.runForDuration(0.86,1.5),
+                        traj1.build(),
                         new ParallelAction(
-                                traj1.build(),
-                                intake.runForDuration(1,-1,5)
+                                intake.runForDuration(1,1,4),
+                                shooter.runForDuration(0.88,4)
                         ),
-                        trajectoryActionCloseOut
+                        traj2.build(),
+                        new ParallelAction(
+                                traj3.build(),
+                                intake.runForDuration(1,-1,2)
+                        ),
+                        trajectoryActionCloseOut,
+                        new ParallelAction(
+                                intake.runForDuration(1,1,4),
+                                shooter.runForDuration(0.86,4)
+                        )
                 )
         );
     }

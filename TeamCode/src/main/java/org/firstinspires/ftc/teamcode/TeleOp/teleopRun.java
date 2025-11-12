@@ -9,14 +9,14 @@ import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.Range;
 import com.qualcomm.robotcore.util.SerialNumber;
 
-@TeleOp(name="TeleOp Shooter", group="TeleOp")
+@TeleOp(name="TeleOp Decode12", group="TeleOp")
 public class teleopRun extends OpMode {
 
     private DcMotorEx outtake, outtake2, fl, fr, bl, br, frontIntake, backIntake;
     private Servo shroud;
 
     // PID constants
-    private static final double Kp = 0.005;
+    private  double Kp = 0.2;
     private static final double Ki = 0.0;
     private static final double Kd = 0.0;
     private static final double Kf = 0.0;
@@ -100,22 +100,22 @@ public class teleopRun extends OpMode {
 
         // --- Outtake PID Control ---
         boolean triggerPressed = gamepad2.right_trigger > TRIGGER_THRESHOLD;
-        if (gamepad2.dpad_right && !dpadRightWasPressed) {
-            pos += 0.02;
-            pos = Range.clip(pos, 0.4, 0.5);
-            shroud.setPosition(pos);
+        if (gamepad1.a && !dpadRightWasPressed) {
+            Kp += 0.1;
+            pos = Range.clip(pos, 0.48, 1);
+            //shroud.setPosition(pos);
         }
 // Update the 'was pressed' variable at the END of the section
-        dpadRightWasPressed = gamepad2.dpad_right;
+        dpadRightWasPressed = gamepad1.a;
 
 // --- Left D-pad Logic (Corrected) ---
-        if (gamepad2.dpad_left && !dpadLeftWasPressed) {
-            pos -= 0.02;
-            pos = Range.clip(pos, 0.4, 0.5);
-            shroud.setPosition(pos);
+        if (gamepad1.b && !dpadLeftWasPressed) {
+            Kp -= 0.1;
+            pos = Range.clip(pos, 0.48, 1);
+            //shroud.setPosition(pos);
         }
 // Update the 'was pressed' variable at the END of the section
-        dpadLeftWasPressed = gamepad2.dpad_left;
+        dpadLeftWasPressed = gamepad1.b;
 
 // --- Up D-pad Logic (Corrected) ---
         if (gamepad2.dpad_up && !dpadUpWasPressed){
@@ -152,8 +152,18 @@ public class teleopRun extends OpMode {
 // --- End Toggle Logic ---
 
 
+        if(gamepad1.right_bumper){
+            outtake.setPower(Kp);
+            outtake2.setPower(Kp);
+        } else if (gamepad1.left_bumper){
+            outtake.setPower(0);
+            outtake2.setPower(0);
+        }
+
+
 // --- Motor Control and Telemetry Logic (Modified) ---
         if (outtakeActive) {
+            /*
             double currentVelocity = outtake.getVelocity();
             double error = TARGET_VELOCITY - currentVelocity;
 
@@ -163,26 +173,26 @@ public class teleopRun extends OpMode {
             double derivative = (dt > 0) ? (error - previousError) / dt : 0;
             double motorPower = Kp * error + Ki * integralSum + Kd * derivative + Kf * TARGET_VELOCITY;
             motorPower = Range.clip(motorPower, -1.0, 1.0);
+            */
+            //outtake.setPower(Kp);
+            //outtake2.setPower(Kp);
 
-            outtake.setPower(motorPower);
-            outtake2.setPower(motorPower);
-
-            previousError = error;
+            //previousError = error;
 
             // Telemetry (only when active)
             telemetry.addData("Outtake Status", "ACTIVE");
-            telemetry.addData("Current Velocity", currentVelocity);
-            telemetry.addData("Error", error);
-            telemetry.addData("Motor Power", motorPower);
+            //telemetry.addData("Current Velocity", currentVelocity);
+            //telemetry.addData("Error", error);
+            telemetry.addData("Kp Value", Kp);
         } else {
             // If we are not active, ensure motors are off
-            outtake.setPower(0);
-            outtake2.setPower(0);
+            //outtake.setPower(0);
+            //outtake2.setPower(0);
 
             // Telemetry (when inactive)
             telemetry.addData("Outtake Status", "INACTIVE");
-            telemetry.addData("Target Velocity", TARGET_VELOCITY);
-            telemetry.addData("Current pos", pos);
+            //telemetry.addData("Target Velocity", TARGET_VELOCITY);
+            telemetry.addData("Kp Value", Kp);
         }
 
         // --- Drivetrain Control ---
