@@ -181,11 +181,11 @@ public class CompetitionAuto extends LinearOpMode {
 
         Actions.runBlocking(
                 new SequentialAction(
-                        shooter.runForDuration(0.86,1.5),
+                        shooter.runForDuration(0.7,1.5),
                         traj1.build(),
                         new ParallelAction(
                                 intake.runForDuration(1,1,4),
-                                shooter.runForDuration(0.88,4)
+                                shooter.runForDuration(0.7,4)
                         ),
                         traj2.build(),
                         new ParallelAction(
@@ -195,7 +195,7 @@ public class CompetitionAuto extends LinearOpMode {
                         trajectoryActionCloseOut,
                         new ParallelAction(
                                 intake.runForDuration(1,1,4),
-                                shooter.runForDuration(0.86,4)
+                                shooter.runForDuration(0.7,4)
                         )
                 )
         );

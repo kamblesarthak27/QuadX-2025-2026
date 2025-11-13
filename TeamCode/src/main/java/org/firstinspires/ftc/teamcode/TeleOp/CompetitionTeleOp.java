@@ -5,10 +5,24 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.Range;
-@TeleOp(name="TeleOpTest", group="TeleOp")
+@TeleOp(name="CompetitionTeleOp", group="TeleOp")
 public class CompetitionTeleOp extends OpMode{
     private DcMotorEx outtake, outtake2, fl, fr, bl, br, frontIntake, backIntake;
+    private Servo shroud;
+
+    // control state variables for toggles
+    boolean gamepad1DpadUpWasPressed = false;
+    boolean gamepad1DpadDownWasPressed = false;
+    boolean gamepad2DpadUpWasPressed = false;
+    boolean gamepad2DpadDownWasPressed = false;
+
+    // init states for outtake and shroud
+    double targetOuttakePwr = 0.0;
+    double pos = 0.5;
+    // outtake toggle
+    boolean outtakeOn = false;
 
     @Override
     public void init() {
@@ -20,6 +34,8 @@ public class CompetitionTeleOp extends OpMode{
         outtake2 = hardwareMap.get(DcMotorEx.class, "outtake2");
         outtake2.setDirection(DcMotorEx.Direction.REVERSE);
         outtake2.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.FLOAT);
+        shroud = hardwareMap.get(Servo.class, "shroudCont");
+        shroud.setPosition(pos); // Set initial position
 
         frontIntake = hardwareMap.get(DcMotorEx.class, "frontIntake");
         backIntake = hardwareMap.get(DcMotorEx.class, "backIntake");
@@ -51,16 +67,45 @@ public class CompetitionTeleOp extends OpMode{
         frontIntake.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         backIntake.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
+
     @Override
     public void loop() {
-        if(gamepad2.right_trigger > 0){
-            outtake.setPower(1);
-            outtake2.setPower(1);
-        } else if (gamepad2.left_trigger > 0){
+        // Outtake power toggle
+        // dpad up to increase by 5%, dpad down to decrease by 5%
+        if (gamepad1.dpad_up && !gamepad1DpadUpWasPressed) {
+            targetOuttakePwr += 0.05; // Increment by 5%
+            targetOuttakePwr = Range.clip(targetOuttakePwr, 0.0, 1.0);
+            telemetry.addData("Outtake Target Power", targetOuttakePwr);
+        }
+        gamepad1DpadUpWasPressed = gamepad1.dpad_up;
+
+        if (gamepad1.dpad_down && !gamepad1DpadDownWasPressed) {
+            targetOuttakePwr -= 0.05; // Decrement by 5%
+            targetOuttakePwr = Range.clip(targetOuttakePwr, 0.0, 1.0);
+            telemetry.addData("Outtake Target Power", targetOuttakePwr);
+        }
+        gamepad1DpadDownWasPressed = gamepad1.dpad_down;
+
+        //Outtake
+        //right trigger to turn on shooter, left trigger to turn on shooter (no need to hold down trigger)
+        if(gamepad2.right_trigger > 0.05){
+            outtakeOn = true;
+            telemetry.addData("shooter state", "ON");
+        }
+        if(gamepad2.left_trigger > 0.05){
+            outtakeOn = false;
+            telemetry.addData("shooter state", "OFF");
+        }
+        if(outtakeOn){
+            outtake.setPower(targetOuttakePwr);
+            outtake2.setPower(targetOuttakePwr);
+        }
+        if(!outtakeOn) {
             outtake.setPower(0);
             outtake2.setPower(0);
         }
 
+        //Drive
         double drive = gamepad1.left_stick_y;
         double turn = -gamepad1.right_stick_x;
         double strafe = gamepad1.left_stick_x;
@@ -75,6 +120,7 @@ public class CompetitionTeleOp extends OpMode{
         bl.setPower(Range.clip(blPower, -1.0, 1.0));
         br.setPower(Range.clip(brPower, -1.0, 1.0));
 
+        //Intake
         if (gamepad2.right_bumper) {
             frontIntake.setPower(1);
             backIntake.setPower(1);
@@ -93,7 +139,24 @@ public class CompetitionTeleOp extends OpMode{
             frontIntake.setPower(0);
             backIntake.setPower(0);
         }
+
+        // Shroud
+        if (gamepad2.dpad_up && !gamepad2DpadUpWasPressed) {
+            pos += 0.1;
+            pos = Range.clip(pos, 0.0, 1.0);
+            shroud.setPosition(pos);
+            telemetry.addData("shroud pos", pos);
+        }
+        gamepad2DpadUpWasPressed = gamepad2.dpad_up;
+
+        if (gamepad2.dpad_down && !gamepad2DpadDownWasPressed) {
+            pos -= 0.1;
+            pos = Range.clip(pos, 0.0, 1.0);
+            shroud.setPosition(pos);
+            telemetry.addData("shroud pos", pos);
+        }
+        gamepad2DpadDownWasPressed= gamepad2.dpad_down;
+
+        telemetry.update();
     }
-
-
 }
