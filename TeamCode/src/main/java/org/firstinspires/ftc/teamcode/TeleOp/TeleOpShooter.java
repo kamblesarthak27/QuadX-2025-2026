@@ -6,7 +6,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.util.Range;
 
-import org.firstinspires.ftc.teamcode.Autos.Outtake;
+import org.firstinspires.ftc.teamcode.PIDs.Outtake;
 
 @TeleOp(name="TeleOp Shooter", group="TeleOp")
 public class TeleOpShooter extends OpMode {
@@ -69,8 +69,7 @@ public class TeleOpShooter extends OpMode {
         }
 
         if (gamepad1.a) {
-            Outtake sender = new Outtake();
-            outtake.setPower(sender.lift(1));
+            outtake.setPower(1);
         }
 
         fl.setPower(flPower);
