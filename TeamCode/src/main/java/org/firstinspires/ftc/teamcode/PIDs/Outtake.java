@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.PIDs;
 
 import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.hardwareMap;
+import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.telemetry;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
@@ -67,6 +68,8 @@ public class Outtake {
             previousError = error;
             previousTime = currentTime;
             currentPower = (double)outtake.getPower();
+            telemetry.addData("Outtake Power: ", outtake.getPower());
+            telemetry.update();
             outtake.setPower(motorPower);
         }
     }

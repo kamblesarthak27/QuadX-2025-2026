@@ -21,8 +21,8 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 @Config
-@Autonomous(name = "testingAuto", group = "Autonomous")
-public class CompetitionAuto extends LinearOpMode {
+@Autonomous(name = "CompetitionAutoBlueClose", group = "Autonomous")
+public class CompetitionAutoBlueClose extends LinearOpMode {
 
     //Outtake pid = new Outtake();
 
@@ -125,7 +125,7 @@ public class CompetitionAuto extends LinearOpMode {
 
     @Override
     public void runOpMode() {
-        Pose2d initialPose = new Pose2d(60, -10, Math.toRadians(180));
+        Pose2d initialPose = new Pose2d(-56, -46, Math.toRadians(180));
         MecanumDrive drive = new MecanumDrive(hardwareMap, initialPose);
         Intake intake = new Intake(hardwareMap);
         Outtake1 shooter = new Outtake1(hardwareMap);
@@ -134,14 +134,14 @@ public class CompetitionAuto extends LinearOpMode {
         // int visionOutputPosition = 1;
 
         TrajectoryActionBuilder traj1 = drive.actionBuilder(initialPose)
-                .strafeToSplineHeading(new Vector2d(55, -10), Math.toRadians(207));
+                .strafeToSplineHeading(new Vector2d(-48, -30), Math.toRadians(207));
 
         TrajectoryActionBuilder traj2 = drive.actionBuilder(initialPose)
-                .lineToXLinearHeading(33, Math.toRadians(270));
+                .lineToXLinearHeading(-32, Math.toRadians(270));
 
         TrajectoryActionBuilder traj3 = traj2.endTrajectory().fresh()
                 .setTangent(Math.toRadians(270))
-                .splineToConstantHeading(new Vector2d(33, -48), Math.toRadians(270))
+                .splineToConstantHeading(new Vector2d(-32, -42), Math.toRadians(270))
                 //.waitSeconds(3)
                 ;
         /*
@@ -152,7 +152,7 @@ public class CompetitionAuto extends LinearOpMode {
                 .waitSeconds(3);
                 */
         Action trajectoryActionCloseOut = traj3.endTrajectory().fresh()
-                .strafeToSplineHeading(new Vector2d(55, -10), Math.toRadians(202))
+                .strafeToSplineHeading(new Vector2d(-48, -30), Math.toRadians(207))
                 .build();
 
         while (!isStopRequested() && !opModeIsActive()) {
@@ -181,11 +181,11 @@ public class CompetitionAuto extends LinearOpMode {
 
         Actions.runBlocking(
                 new SequentialAction(
-                        shooter.runForDuration(0.7,1.5),
+                        shooter.runForDuration(0.6,1.5),
                         traj1.build(),
                         new ParallelAction(
                                 intake.runForDuration(1,1,4),
-                                shooter.runForDuration(0.7,4)
+                                shooter.runForDuration(0.6,4)
                         ),
                         traj2.build(),
                         new ParallelAction(
@@ -195,7 +195,7 @@ public class CompetitionAuto extends LinearOpMode {
                         trajectoryActionCloseOut,
                         new ParallelAction(
                                 intake.runForDuration(1,1,4),
-                                shooter.runForDuration(0.7,4)
+                                shooter.runForDuration(0.6,4)
                         )
                 )
         );

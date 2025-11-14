@@ -1,21 +1,19 @@
 package org.firstinspires.ftc.teamcode.TeleOp;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.teamcode.PIDs.Outtake;
 
-@TeleOp(name="TeleOp Shooter", group="TeleOp")
-public class TeleOpShooter extends OpMode {
+@com.qualcomm.robotcore.eventloop.opmode.TeleOp
+public class TeleOp extends OpMode {
     private DcMotorEx fl;
     private DcMotorEx fr;
     private DcMotorEx bl;
     private DcMotorEx br;
     private DcMotorEx outtake;
-    private Outtake sender;
 
     @Override
     public void init() {
@@ -42,8 +40,6 @@ public class TeleOpShooter extends OpMode {
         fr.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         br.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         outtake.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-
-        sender = new Outtake();
     }
 
     @Override
@@ -72,7 +68,7 @@ public class TeleOpShooter extends OpMode {
         }
 
         if (gamepad1.a) {
-            sender.outtake(1);
+            outtake.setPower(1);
         }
 
         fl.setPower(flPower);
