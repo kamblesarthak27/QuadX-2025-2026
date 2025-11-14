@@ -152,7 +152,7 @@ public class CompetitionAutoBlueFar extends LinearOpMode {
                 .waitSeconds(3);
                 */
         Action trajectoryActionCloseOut = traj3.endTrajectory().fresh()
-                .strafeToSplineHeading(new Vector2d(55, -10), Math.toRadians(202))
+                .strafeToSplineHeading(new Vector2d(55, -10), Math.toRadians(205))
                 .build();
 
         while (!isStopRequested() && !opModeIsActive()) {
@@ -181,11 +181,11 @@ public class CompetitionAutoBlueFar extends LinearOpMode {
 
         Actions.runBlocking(
                 new SequentialAction(
-                        shooter.runForDuration(0.7,1.5),
+                        shooter.runForDuration(0.82,1.5),
                         traj1.build(),
                         new ParallelAction(
                                 intake.runForDuration(1,1,4),
-                                shooter.runForDuration(0.7,4)
+                                shooter.runForDuration(0.82,4)
                         ),
                         traj2.build(),
                         new ParallelAction(
@@ -195,8 +195,9 @@ public class CompetitionAutoBlueFar extends LinearOpMode {
                         trajectoryActionCloseOut,
                         new ParallelAction(
                                 intake.runForDuration(1,1,4),
-                                shooter.runForDuration(0.7,4)
-                        )
+                                shooter.runForDuration(0.82,4)
+                        ),
+                        traj2.build()
                 )
         );
     }

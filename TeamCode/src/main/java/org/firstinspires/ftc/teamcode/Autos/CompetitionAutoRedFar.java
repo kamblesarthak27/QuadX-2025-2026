@@ -140,7 +140,7 @@ public class CompetitionAutoRedFar extends LinearOpMode {
                 .lineToXLinearHeading(33, Math.toRadians(90));
 
         TrajectoryActionBuilder traj3 = traj2.endTrajectory().fresh()
-                .setTangent(Math.toRadians(270))
+                .setTangent(Math.toRadians(90))
                 .splineToConstantHeading(new Vector2d(33, 48), Math.toRadians(90))
                 //.waitSeconds(3)
                 ;
@@ -196,7 +196,8 @@ public class CompetitionAutoRedFar extends LinearOpMode {
                         new ParallelAction(
                                 intake.runForDuration(1,1,4),
                                 shooter.runForDuration(0.82,4)
-                        )
+                        ),
+                        traj2.build()
                 )
         );
     }
